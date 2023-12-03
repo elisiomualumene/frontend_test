@@ -26,7 +26,7 @@ export const Input = ({
         )}
       />
 
-      {error && <label className="text-red-500">{error}</label>}
+      {error && <label className="text-red-500">{error.toString()}</label>}
     </div>
   );
 };
