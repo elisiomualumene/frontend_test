@@ -1,9 +1,9 @@
-export type IndustryOption = {
+export type SectorsOption = {
   label: string;
-  options: IndustryOption[];
+  options: SectorsOption[];
 };
 
-const industries: IndustryOption[] = [
+const sectors: SectorsOption[] = [
   {
     label: "Manufacturing",
     options: [
