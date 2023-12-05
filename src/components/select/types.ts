@@ -6,5 +6,5 @@ export interface SelectInputProps extends UseControllerProps {
   name: string;
   control: Control<FieldValues>;
   error: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
-  children: ReactNode;
+  children?: ReactNode;
 }
