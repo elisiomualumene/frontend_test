@@ -18,12 +18,16 @@ export default function App() {
     resolver: yupResolver(FormValidationSchema),
   });
 
-  const { isLoading, data: industries } = useQuery("industries data", () =>
-    fetch(`${environment.API_URL}/industries`).then((res) => res.json())
+  const { isLoading, data: sectors } = useQuery("sectors data", () =>
+    fetch(`${environment.API_URL}/sectors`).then((res) => res.json())
   );
 
-  const SetOnDatabase: SubmitHandler<IFormValues> = (data) => {
-    console.log(data);
+  /* HERE */
+  const SetOnDatabase: SubmitHandler<IFormValues> = async (data) => {
+    await fetch(`${environment.API_URL}/users`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   };
 
   return (
@@ -45,14 +49,13 @@ export default function App() {
             label="Name"
             error={errors?.name?.message}
           />
-          {industries && !isLoading && (
+          {sectors && !isLoading && (
             <Select
               name="sector"
               control={control}
               label="Sector"
               error={errors?.sector?.message}
-              options={industries}
-              children={undefined}
+              options={sectors}
             />
           )}
 
@@ -60,9 +63,9 @@ export default function App() {
             <Input
               type="checkbox"
               control={control}
-              name="term"
+              name="terms"
               className="w-6 h-4 p-0 m-0"
-              error={errors?.term?.message}
+              error={errors?.terms?.message}
             />
             <p className="text-[#8B96A0] text-center text-[14px]">
               Agree to Terms
