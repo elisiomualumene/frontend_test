@@ -1,5 +1,13 @@
 {
-  "industries": [
+  "users": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    }
+  ],
+  "sectors": [
     {
       "label": "Manufacturing",
       "options": [
