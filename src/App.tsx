@@ -1,20 +1,16 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { FormValidationSchema, Input, Select, environment } from "./module";
-import { useQuery } from "react-query";
-import { useState } from "react";
-
-export type IFormValues = {
-  name: string;
-  sector: string;
-  term: boolean;
-};
-
-type IPostUserDataResponse = {
-  status: number;
-  statusText: string;
-  ok: boolean;
-};
+import {
+  FormValidationSchema,
+  IFormValues,
+  IPostUserDataResponse,
+  Input,
+  Select,
+  SubmitHandler,
+  environment,
+  useForm,
+  useQuery,
+  useState,
+  yupResolver,
+} from "./module";
 
 export default function App() {
   const [postUserData, setPostUserData] = useState<IPostUserDataResponse>();
@@ -55,7 +51,7 @@ export default function App() {
 
       {postUserData && postUserData?.status !== 201 && (
         <div className="bg-white m-4 p-4 rounded-lg text-red-600 font-bold text-lg">
-          user was not created! something goes wrong
+          user was not registered! something goes wrong
         </div>
       )}
 
