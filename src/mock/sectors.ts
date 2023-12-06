@@ -3,7 +3,7 @@ export type SectorsOption = {
   options: SectorsOption[];
 };
 
-const sectors: SectorsOption[] = [
+export const sectors: SectorsOption[] = [
   {
     label: "Manufacturing",
     options: [

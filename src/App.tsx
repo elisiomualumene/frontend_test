@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormValidationSchema, Input, Select, environment } from "./module";
 import { useQuery } from "react-query";
+import { useState } from "react";
 
 export type IFormValues = {
   name: string;
@@ -9,7 +10,15 @@ export type IFormValues = {
   term: boolean;
 };
 
+type IPostUserDataResponse = {
+  status: number;
+  statusText: string;
+  ok: boolean;
+};
+
 export default function App() {
+  const [postUserData, setPostUserData] = useState<IPostUserDataResponse>();
+
   const {
     control,
     handleSubmit,
@@ -18,26 +27,48 @@ export default function App() {
     resolver: yupResolver(FormValidationSchema),
   });
 
-  const { isLoading, data: sectors } = useQuery("sectors data", () =>
+  const {
+    isLoading,
+    data: sectors,
+    error,
+  } = useQuery("sectors data", () =>
     fetch(`${environment.API_URL}/sectors`).then((res) => res.json())
   );
 
-  /* HERE */
   const SetOnDatabase: SubmitHandler<IFormValues> = async (data) => {
     await fetch(`${environment.API_URL}/users`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
-    });
+    }).then((response) => setPostUserData(response));
   };
 
   return (
-    <main className="bg-zinc-50 h-screen w-full font-inter flex items-center justify-center ">
+    <main className="flex flex-col bg-zinc-50 h-screen w-full font-inter flex items-center justify-center ">
+      {postUserData && postUserData?.status === 201 && (
+        <div className="bg-white m-4 p-4 rounded-lg text-green-600 font-bold text-lg">
+          user successfully registered
+        </div>
+      )}
+
+      {postUserData && postUserData?.status !== 201 && (
+        <div className="bg-white m-4 p-4 rounded-lg text-red-600 font-bold text-lg">
+          user was not created! something goes wrong
+        </div>
+      )}
+
+      {(error as Error) && (
+        <div className="bg-white m-4 p-4 rounded-lg text-red-600 font-bold text-lg">
+          {(error as Error).message}
+        </div>
+      )}
       <article className="bg-white w-[420px] min-h-[440px] rounded-[30px] p-4 shadow-xl">
         <p className="text-[#8B96A0] text-center text-[18px]">
           Please enter your name and pick the Sectors you are currently involved
           in.
         </p>
-
         <form
           onSubmit={handleSubmit(SetOnDatabase)}
           className="flex flex-col gap-4 mt-6"

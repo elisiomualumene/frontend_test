@@ -1,10 +1,29 @@
 {
   "users": [
     {
+      "name": "Elisio Mualumene",
+      "terms": true,
+      "sector": "3",
       "id": 1
     },
     {
+      "name": "mualumene",
+      "terms": true,
+      "sector_id": "2",
+      "sector": "3",
       "id": 2
+    },
+    {
+      "name": "mualumene",
+      "terms": true,
+      "sector": "2",
+      "id": 3
+    },
+    {
+      "name": "mualumenee",
+      "terms": true,
+      "sector": "2",
+      "id": 4
     }
   ],
   "sectors": [
