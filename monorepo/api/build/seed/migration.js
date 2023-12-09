@@ -29,13 +29,17 @@ const sectors_1 = require("../mock/sectors");
       FOREIGN KEY (sectorId) REFERENCES sectors(id)
     );
   `));
-    for (const sector of sectors_1.Sectors) {
-        const result = yield (pool === null || pool === void 0 ? void 0 : pool.query("INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id", [sector.label, null]));
-        const categoryId = result === null || result === void 0 ? void 0 : result.rows[0].id;
-        if (sector.options && sector.options.length > 0) {
-            for (const option of sector.options) {
-                yield (pool === null || pool === void 0 ? void 0 : pool.query("INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id", [option.label, categoryId]));
+    function insertData(client, data, parentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (const item of data) {
+                const result = yield client.query("INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id", [item.label, parentId]);
+                const categoryId = result.rows[0].id;
+                if (item.options && item.options.length > 0) {
+                    yield insertData(client, item.options, categoryId);
+                }
             }
-        }
+        });
     }
+    insertData(pool, sectors_1.Sectors);
+    console.log("Data inserted successfully.");
 }))();

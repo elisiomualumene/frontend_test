@@ -22,21 +22,25 @@ import { Sectors } from "../mock/sectors";
     );
   `);
 
-  for (const sector of Sectors) {
-    const result = await pool?.query(
-      "INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id",
-      [sector.label, null]
-    );
+  async function insertData(
+    client: any,
+    data: any[],
+    parentId?: number | null
+  ): Promise<void> {
+    for (const item of data) {
+      const result = await client.query(
+        "INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id",
+        [item.label, parentId]
+      );
 
-    const categoryId = result?.rows[0].id;
+      const categoryId = result.rows[0].id;
 
-    if (sector.options && sector.options.length > 0) {
-      for (const option of sector.options) {
-        await pool?.query(
-          "INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id",
-          [option.label, categoryId]
-        );
+      if (item.options && item.options.length > 0) {
+        await insertData(client, item.options, categoryId);
       }
     }
   }
+
+  insertData(pool, Sectors);
+  console.log("Data inserted successfully.");
 })();
