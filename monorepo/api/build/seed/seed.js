@@ -11,31 +11,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../db/db");
 const sectors_1 = require("../mock/sectors");
-function insertData(client, data, parentId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const item of data) {
-            const result = yield client.query("INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id", [item.label, parentId]);
-            const categoryId = result.rows[0].id;
-            if (item.options && item.options.length > 0) {
-                yield insertData(client, item.options, categoryId);
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    function insertData(client, data, parentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (const item of data) {
+                const result = yield client.query("INSERT INTO sectors (label, parent_id) VALUES ($1, $2) RETURNING id", [item.label, parentId]);
+                const categoryId = result.rows[0].id;
+                if (item.options && item.options.length > 0) {
+                    yield insertData(client, item.options, categoryId);
+                }
             }
-        }
-    });
-}
-function seed() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield db_1.pool.connect();
-            yield insertData(db_1.pool, sectors_1.Sectors);
-            console.log("Data inserted successfully.");
-        }
-        catch (error) {
-            console.error("Error inserting data:", error);
-        }
-        finally {
-            yield db_1.pool.end();
-            process.exit();
-        }
-    });
-}
-seed();
+        });
+    }
+    try {
+        yield db_1.pool.connect();
+        yield insertData(db_1.pool, sectors_1.Sectors);
+        console.log("Data inserted successfully.");
+    }
+    catch (error) {
+        console.error("Error inserting data:", error);
+    }
+    finally {
+        yield db_1.pool.end();
+        process.exit();
+    }
+}))();
