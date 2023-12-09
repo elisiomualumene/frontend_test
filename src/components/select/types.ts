@@ -1,10 +1,13 @@
-import { ReactNode } from "react";
-import { Control, FieldError, FieldErrorsImpl, FieldValues, Merge, UseControllerProps } from "react-hook-form";
+interface Sector {
+  id: string;
+  label: string;
+  parent_id: string | null;
+}
 
-export interface SelectInputProps extends UseControllerProps {
-  label?: string;
+export interface SectorSelectProps {
+  sectors: Sector[];
   name: string;
-  control: Control<FieldValues>;
-  error: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
-  children?: ReactNode;
+  control: any;
+  label: string;
+  error: any;
 }
