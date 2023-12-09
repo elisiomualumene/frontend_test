@@ -1,71 +1,52 @@
+import React from "react";
 import { Controller } from "react-hook-form";
-import { SelectInputProps } from "./types";
+import { SectorSelectProps } from "./types";
 
-interface NestedOption {
-  label: string;
-  options?: NestedOption[];
-}
-
-interface NestedSelectProps extends SelectInputProps {
-  options: NestedOption[];
-}
-
-export function Select({
-  label,
+export const Select: React.FC<SectorSelectProps> = ({
+  sectors,
   control,
   name,
+  label,
   error,
-  options,
-  children,
-  ...rest
-}: NestedSelectProps): JSX.Element {
-  const flattenedOptions: NestedOption[] = [];
+}) => {
+  const renderOptions = (parentId: string | null = null, level: number = 0) => {
+    const filteredSectors = sectors.filter(
+      (sector) => sector.parent_id === parentId
+    );
 
-  const flattenOptions = (nestedOptions: NestedOption[], prefix = "") => {
-    nestedOptions.forEach((option) => {
-      flattenedOptions.push({
-        label: prefix + option.label,
-      });
-
-      if (option.options) {
-        flattenOptions(option.options, `${prefix} -`);
-      }
-    });
+    return filteredSectors.map((sector) => (
+      <React.Fragment key={sector.id}>
+        <option value={sector.id}>
+          {"-".repeat(level * 2)} {sector.label}
+        </option>
+        {renderOptions(sector.id, level + 1)}
+      </React.Fragment>
+    ));
   };
 
-  flattenOptions(options);
-
   return (
-    <div className="w-full">
-      {label && <label className="font-bold mb-2">{label}</label>}
+    <div>
+      {label && <label className="font-bold indent-2 mb-2">{label}</label>}
       <Controller
         name={name}
         control={control}
-        defaultValue={[]}
-        render={({ field: { onBlur, onChange, ref } }) => (
+        render={({ field: { onChange, onBlur, value, ref } }) => (
           <select
-            {...rest}
-            onChange={onChange}
-            onBlur={onBlur}
-            defaultValue={[]}
+            id={name}
             ref={ref}
-            multiple
-            size={5}
-            className="w-full border outline-none border-[#C5CACF] rounded-xl min-h-[50px] font-bold"
+            value={value || ""}
+            onBlur={onBlur}
+            onChange={onChange}
+            className="w-full border outline-none border-[#C5CACF] font-bold rounded-xl min-h-[50px] indent-2"
           >
-            <option value="" disabled hidden>
-              {label ? `Select ${label.toLowerCase()}` : "Select option(s)"}
+            <option value="" disabled>
+              Select a sector
             </option>
-            {flattenedOptions.map((option, index) => (
-              <option key={index} value={index}>
-                {option.label}
-              </option>
-            ))}
+            {renderOptions()}
           </select>
         )}
       />
-      {error && <label className="text-red-500">{error.toString()}</label>}
-      {children}
+      {error && <label className="text-red-500">{error}</label>}
     </div>
   );
-}
+};
