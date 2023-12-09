@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
 import cors from "cors";
+
+dotenv.config();
+
 import express, { json } from "express";
-import { pool } from "./db";
+import { pool } from "./db/db";
 
 const app = express();
 
@@ -49,7 +53,7 @@ app.post("/register", async (request, response) => {
       [name, sectorId, terms]
     );
 
-    return response.status(201).json({ message: "saved", data: result.rows });
+    return response.status(201).json({ message: "saved", data: result.fields });
   } catch (error) {
     console.log(error);
 
