@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev api.ts",
-    "seed:dev": "ts-node-dev seed/seed.ts",
     "migrations": "node build/seed/migration.js",
     "build": "tsc",
-    "seed:prod": "node build/seed/seed.js",
     "start": "node build/api.js"
 
   },

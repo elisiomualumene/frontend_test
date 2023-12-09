@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../db/db");
 const sectors_1 = require("../mock/sectors");
 (() => __awaiter(void 0, void 0, void 0, function* () {
+    const pool = (0, db_1.db)();
     function insertData(client, data, parentId) {
         return __awaiter(this, void 0, void 0, function* () {
             for (const item of data) {
@@ -24,15 +25,15 @@ const sectors_1 = require("../mock/sectors");
         });
     }
     try {
-        yield db_1.pool.connect();
-        yield insertData(db_1.pool, sectors_1.Sectors);
+        yield (pool === null || pool === void 0 ? void 0 : pool.connect());
+        yield insertData(pool, sectors_1.Sectors);
         console.log("Data inserted successfully.");
     }
     catch (error) {
         console.error("Error inserting data:", error);
     }
     finally {
-        yield db_1.pool.end();
+        yield (pool === null || pool === void 0 ? void 0 : pool.end());
         process.exit();
     }
 }))();

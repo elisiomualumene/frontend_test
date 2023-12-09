@@ -40,23 +40,24 @@ const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const express_1 = __importStar(require("express"));
 const db_1 = require("./db/db");
+const pool = (0, db_1.db)();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use((0, express_1.json)());
 app.get("/sectors", (_request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    const sectors = yield db_1.pool.query(`SELECT *
+    const sectors = yield (pool === null || pool === void 0 ? void 0 : pool.query(`SELECT *
     FROM sectors;
-    `);
-    return response.status(200).json(sectors.rows);
+    `));
+    return response.status(200).json(sectors === null || sectors === void 0 ? void 0 : sectors.rows);
 }));
 app.get("/sectors/:id", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = request.params;
-        const sectors = yield db_1.pool.query(`SELECT *
+        const sectors = yield (pool === null || pool === void 0 ? void 0 : pool.query(`SELECT *
     FROM sectors
     WHERE id = $1
-    `, [id]);
-        return response.status(200).json(sectors.rows);
+    `, [id]));
+        return response.status(200).json(sectors === null || sectors === void 0 ? void 0 : sectors.rows);
     }
     catch (error) {
         return response.status(400).json({ message: "error", data: error });
@@ -65,8 +66,8 @@ app.get("/sectors/:id", (request, response) => __awaiter(void 0, void 0, void 0,
 app.post("/register", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, sectorId, terms } = request.body;
-        const result = yield db_1.pool.query("INSERT INTO users (name, sectorId, terms_accepted) VALUES ($1, $2, $3);", [name, sectorId, terms]);
-        return response.status(201).json({ message: "saved", data: result.fields });
+        const result = yield (pool === null || pool === void 0 ? void 0 : pool.query("INSERT INTO users (name, sectorId, terms_accepted) VALUES ($1, $2, $3);", [name, sectorId, terms]));
+        return response.status(201).json({ message: "saved" });
     }
     catch (error) {
         console.log(error);
