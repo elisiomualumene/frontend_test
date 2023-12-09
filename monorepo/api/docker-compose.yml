@@ -15,20 +15,20 @@ services:
     networks:
       - c
 
-  pg_dump:
-    image: postgres
-    command:
-      [
-        "sh",
-        "-c",
-        "PGPASSWORD=test pg_dump -h database -U test -d test > /docker-entrypoint-initdb.d/backup.sql",
-      ]
-    depends_on:
-      - database
-    volumes:
-      - ./backup:/docker-entrypoint-initdb.d
-    networks:
-      - c
+#  pg_dump:
+#    image: postgres
+#    command:
+#     [
+#      "sh",
+#     "-c",
+#     "PGPASSWORD=test pg_dump -h database -U test -d test > /docker-entrypoint-initdb.d/backup.sql",
+#      ]
+#    depends_on:
+#      - database
+#    volumes:
+#      - ./backup:/docker-entrypoint-initdb.d
+#    networks:
+#      - c
 
 volumes:
   pg:

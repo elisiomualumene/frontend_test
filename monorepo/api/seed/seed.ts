@@ -1,14 +1,6 @@
 import { pool } from "../db/db";
 import { Sectors } from "../mock/sectors";
 
-pool.query(`
-CREATE TABLE sectors (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    label VARCHAR(255) NOT NULL,
-    parent_id UUID REFERENCES sectors(id)
-);
-`);
-
 async function insertData(
   client: any,
   data: any[],
@@ -37,6 +29,7 @@ async function seed() {
     console.error("Error inserting data:", error);
   } finally {
     await pool.end();
+    process.exit();
   }
 }
 

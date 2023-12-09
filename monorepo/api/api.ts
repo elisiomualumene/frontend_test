@@ -39,14 +39,6 @@ app.post("/register", async (request, response) => {
   try {
     const { name, sectorId, terms } = request.body;
 
-    await pool.query(`CREATE TABLE IF NOT EXISTS users (
-      id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      sectorId UUID,
-      terms_accepted BOOLEAN,
-      FOREIGN KEY (sectorId) REFERENCES sectors(id)
-  );
-  `);
 
     const result = await pool.query(
       "INSERT INTO users (name, sectorId, terms_accepted) VALUES ($1, $2, $3);",
