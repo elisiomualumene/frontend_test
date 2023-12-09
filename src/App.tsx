@@ -32,7 +32,7 @@ export default function App() {
   );
 
   const SetOnDatabase: SubmitHandler<IFormValues> = async (data) => {
-    await fetch(`${environment.API_URL}/users`, {
+    await fetch(`${environment.API_URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,6 +40,9 @@ export default function App() {
       body: JSON.stringify(data),
     }).then((response) => setPostUserData(response));
   };
+
+  console.log(postUserData);
+  
 
   return (
     <main className="flex flex-col bg-zinc-50 h-screen w-full font-inter flex items-center justify-center ">
@@ -78,11 +81,11 @@ export default function App() {
           />
           {sectors && !isLoading && (
             <Select
-              name="sector"
-              control={control}
               label="Sector"
-              error={errors?.sector?.message}
-              options={sectors}
+              sectors={sectors}
+              name="sectorId"
+              control={control}
+              error={errors?.sectorId?.message}
             />
           )}
 
