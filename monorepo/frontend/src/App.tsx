@@ -40,8 +40,6 @@ export default function App() {
       body: JSON.stringify(data),
     }).then((response) => setPostUserData(response));
   };
-
-  console.log(postUserData);
   
 
   return (
